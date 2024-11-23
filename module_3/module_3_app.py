@@ -1,51 +1,37 @@
 import tkinter as tk
+from tkinter.filedialog import askopenfile
 
-def get_value():
-    num1 = int(numder1_entry.get())
-    num2 = int(numder2_entry.get())
-    return num1, num2
-def insert_values(value):
-    answer_entry.delete(0, 'end')
-    answer_entry.insert(0, value)
-def add():
-    num1, num2 =  get_value()
-    value = num1 + num2
-    insert_values(value)
-def sub():
-    num1, num2 =get_value()
-    value = num1 - num2
-    insert_values(value)
-def div():
-    num1, num2 =get_value()
-    value = num1 / num2
-    insert_values(value)
-def mul():
-    num1, num2 =get_value()
-    value = num1 * num2
-    insert_values(value)
+import pdf2image
+
+
+def open_file():
+    file_path = askopenfile(mode='r', filetypes=[('PDF', '.pdf')])
+    print(file_path)
+    pass
+    pages = pdf2image.convert_from_path(file_path.name)
+    print(pages)
+    for i in range(len(pages)):
+        pages[i].save('page' + str(i) + '.jpg', 'JPEG')
 
 window = tk.Tk()
-window.title('Test App')
-window.geometry('350x350')
+window.title('Конвертер PDF')
+window.geometry('350x150')
 window.resizable(False, False)
-button_add = tk.Button(window, text='+', width=2, height=2, command=add)
-button_add.place(x=100, y=200)
-button_sub = tk.Button(window, text='-', width=2, height=2, command=sub)
-button_sub.place(x=150, y=200)
-button_mul = tk.Button(window, text='*', width=2, height=2, command=mul)
-button_mul.place(x=200, y=200)
-button_div = tk.Button(window, text='/', width=2, height=2, command=div)
-button_div.place(x=250, y=200)
-numder1_entry = tk.Entry(window, width=28)
-numder1_entry.place(x=100, y=75)
-number1_label = tk.Label(window, text='Введите первое число:')
-number1_label.place(x=100, y=50)
-numder2_entry = tk.Entry(window, width=28)
-numder2_entry.place(x=100, y=150)
-number2_label = tk.Label(window, text='Введите второе число:')
-number2_label.place(x=100, y=125)
-answer_entry = tk.Entry(window, width=28)
-answer_entry.place(x=100, y=300)
-answer_label = tk.Label(window, text='Ответ:')
-answer_label.place(x=100, y=275)
+
+button_upload = tk.Button(window, text='Загрузить файл', width=20, height=2, command=open_file)
+button_upload.place(x=100, y=50)
+
+# number1_entry = tk.Entry(window, width=28)
+# number1_entry.place(x=100, y=75)
+# number1_label = tk.Label(window, text='Введите первое число:')
+# number1_label.place(x=100, y=50)
+# number2_entry = tk.Entry(window, width=28)
+# number2_entry.place(x=100, y=150)
+# number2_label = tk.Label(window, text='Введите второе число:')
+# number2_label.place(x=100, y=125)
+# answer_entry = tk.Entry(window, width=28)
+# answer_entry.place(x=100, y=300)
+# answer_label = tk.Label(window, text='Ответ:')
+# answer_label.place(x=100, y=275)
+
 window.mainloop()
