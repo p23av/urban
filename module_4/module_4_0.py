@@ -1,4 +1,3 @@
-def say_hi(x):
-    print(f'Hi {x}')
+import modules
 
-a = 5
+print(modules.a)
