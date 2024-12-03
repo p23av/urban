@@ -2,9 +2,9 @@ import threading, time
 
 main_time_start = time.time()
 def write_words(word_count, file_name):
-    file = open(file_name, 'a')
+    file = open(file_name, 'a', encoding='utf-8')
     for i in range(word_count):
-        time.sleep(0.1)
+        time.sleep(0.01)
         file.write(f'Какое-то слово № {i}\n')
     print(f'Завершилась запись в файл {file_name}')
 
