@@ -15,11 +15,13 @@ class Table:
 
 class Guest(threading.Thread):
     def __init__(self, name):
-        super().__init__(name)
+        threading.Thread.__init__(self)
         self.name = name
 
     def run(self):
+        # print('> start', self.name)
         time.sleep(random.randint(3, 10))
+        # print('>> finish', self.name)
 
 class Cafe:
     def __init__(self, *tables):
@@ -28,32 +30,38 @@ class Cafe:
 
     def guest_arrival(self, *guests):
         for guest in [*guests]:
+            flag_closed_table = True
             for table in self.tables:
                 if table.guest is None:
                     table.set_guest(guest)
+                    guest.start()
                     print(f'{guest.name} сел(-а) за стол номер {table.number}')
+                    flag_closed_table = False
                     break
-            self.queue.put(guest)
-            print(f'{guest.name} в очереди')
-
+            if flag_closed_table:
+                self.queue.put(guest)
+                print(f'{guest.name} в очереди')
+        # print('end arrival')
 
     def discuss_guests(self):
-
-        flag = True
-        while flag:
-            if flag#self.queue.is_alive
-                print(f'<имя гостя за текущим столом> покушал(-а) и ушёл(ушла)')
-                print(f'Стол номер <номер стола> свободен')
-                table.del_guest()
-            elif not flag:
-                guest = self.queue.get()
-                table.set_guest(guest)
-                print(f'<имя гостя из очереди> вышел(-ла) из очереди и сел(-а) за стол номер <номер стола>')
-
-
-
-
-
+        while self.queue.empty() == False or len(list(filter(lambda table: not table.guest is None, self.tables))) > 0:
+            # time.sleep(1)
+            # print('**', [(table.number, 'None' if table.guest is None else table.guest.name) for table in self.tables], '*', '|', self.queue.qsize())
+            # print('**', [table.guest.name for table in closed_tables], '*', '|', self.queue.qsize())
+            for table in self.tables:
+                is_closed_table = table.guest is None
+                if is_closed_table == False and table.guest.is_alive() == False:
+                    print(f'{table.guest.name} покушал(-а) и ушёл(ушла)')
+                    print(f'Стол номер {table.number} свободен')
+                    table.del_guest()
+                elif self.queue.empty() == False and table.guest is None:
+                    guest = self.queue.get()
+                    table.set_guest(guest)
+                    print(f'{guest.name} вышел(-ла) из очереди и сел(-а) за стол номер {table.number}')
+                    guest.start()
+                    # print('**', [(table.number, 'None' if table.guest is None else table.guest.name) for table in
+                    #                self.tables])
+        # print(closed_tables, self.queue.qsize())
 
 # Создание столов
 tables = [Table(number) for number in range(1, 6)]
