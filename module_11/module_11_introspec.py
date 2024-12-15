@@ -13,7 +13,7 @@ def introspection_info(obj):
         "methods": obj_methods,
         "module": obj_module
     }
-    
+
     return info
 
 
