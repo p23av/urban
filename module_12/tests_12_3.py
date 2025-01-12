@@ -1,4 +1,5 @@
 import unittest
+import logging
 
 class Runner:
     def __init__(self, name, speed=5):
@@ -45,10 +46,14 @@ class RunnerTest(unittest.TestCase):
 
     @unittest.skipIf(is_frozen == True, 'Тесты в этом кейсе заморожены')
     def test_walk(self):
-        same = Runner('Walk')
-        for i in range(10):
-            same.walk()
-        self.assertEqual(same.distance, 50)
+        try:
+            same = Runner('Walk', -30)
+            for i in range(10):
+                same.walk()
+            self.assertEqual(same.distance, 50)
+            logging.info('"test_walk" выполнен успешно')
+        except ValueError:
+            logging.warning("Неверная скорость для Runner")
 
     @unittest.skipIf(is_frozen == True, 'Тесты в этом кейсе заморожены')
     def test_run(self):
